@@ -12,13 +12,13 @@ Napiste program, ktery vytvori lucistnika a vystreli vsechny sipy.
         {
             Lucistnik Robin = new Lucistnik(10);
 
-            while (Robin.PocetSipu >= 0)
+            while (Robin.PocetSipu > 0)
             {
                 Robin.Vystrel();
 
             }
+            Robin.Vystrel();
 
-            
         }
     }
 }
