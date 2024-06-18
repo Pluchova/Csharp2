@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             cbPrvky = new ComboBox();
-            chbinverted = new CheckBox();
-            nudpocet = new NumericUpDown();
-            btPotvrzeni = new Button();
+            cbInverted = new CheckBox();
+            NumericUpDown = new NumericUpDown();
+            btnPotvrdit = new Button();
             lbNahodnePrvky = new ListBox();
-            ((System.ComponentModel.ISupportInitialize)nudpocet).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)NumericUpDown).BeginInit();
             SuspendLayout();
             // 
             // cbPrvky
@@ -44,33 +44,35 @@
             cbPrvky.Size = new Size(151, 28);
             cbPrvky.TabIndex = 0;
             cbPrvky.Text = "Výběr obtížnosti";
-            cbPrvky.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            cbPrvky.SelectedIndexChanged += Form1_Load;
             // 
-            // chbinverted
+            // cbInverted
             // 
-            chbinverted.AutoSize = true;
-            chbinverted.Location = new Point(104, 180);
-            chbinverted.Name = "chbinverted";
-            chbinverted.Size = new Size(156, 24);
-            chbinverted.TabIndex = 1;
-            chbinverted.Text = "Zahrnout inverted?";
-            chbinverted.UseVisualStyleBackColor = true;
+            cbInverted.AutoSize = true;
+            cbInverted.Location = new Point(104, 180);
+            cbInverted.Name = "cbInverted";
+            cbInverted.Size = new Size(188, 24);
+            cbInverted.TabIndex = 1;
+            cbInverted.Text = "Zahrnout inverted prvky";
+            cbInverted.UseVisualStyleBackColor = true;
+            cbInverted.CheckedChanged += cbInverted_CheckedChanged;
             // 
-            // nudpocet
+            // NumericUpDown
             // 
-            nudpocet.Location = new Point(102, 226);
-            nudpocet.Name = "nudpocet";
-            nudpocet.Size = new Size(150, 27);
-            nudpocet.TabIndex = 2;
+            NumericUpDown.Location = new Point(102, 226);
+            NumericUpDown.Name = "NumericUpDown";
+            NumericUpDown.Size = new Size(150, 27);
+            NumericUpDown.TabIndex = 2;
             // 
-            // btPotvrzeni
+            // btnPotvrdit
             // 
-            btPotvrzeni.Location = new Point(102, 281);
-            btPotvrzeni.Name = "btPotvrzeni";
-            btPotvrzeni.Size = new Size(94, 29);
-            btPotvrzeni.TabIndex = 3;
-            btPotvrzeni.Text = "Potvrdit";
-            btPotvrzeni.UseVisualStyleBackColor = true;
+            btnPotvrdit.Location = new Point(102, 281);
+            btnPotvrdit.Name = "btnPotvrdit";
+            btnPotvrdit.Size = new Size(94, 29);
+            btnPotvrdit.TabIndex = 3;
+            btnPotvrdit.Text = "Potvrdit";
+            btnPotvrdit.UseVisualStyleBackColor = true;
+            btnPotvrdit.Click += btnPotvrdit_Click;
             // 
             // lbNahodnePrvky
             // 
@@ -87,14 +89,14 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(lbNahodnePrvky);
-            Controls.Add(btPotvrzeni);
-            Controls.Add(nudpocet);
-            Controls.Add(chbinverted);
+            Controls.Add(btnPotvrdit);
+            Controls.Add(NumericUpDown);
+            Controls.Add(cbInverted);
             Controls.Add(cbPrvky);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
-            ((System.ComponentModel.ISupportInitialize)nudpocet).EndInit();
+            ((System.ComponentModel.ISupportInitialize)NumericUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -102,9 +104,9 @@
         #endregion
 
         private ComboBox cbPrvky;
-        private CheckBox chbinverted;
-        private NumericUpDown nudpocet;
-        private Button btPotvrzeni;
+        private CheckBox cbInverted;
+        private NumericUpDown NumericUpDown;
+        private Button btnPotvrdit;
         private ListBox lbNahodnePrvky;
     }
 }
