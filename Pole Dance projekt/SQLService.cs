@@ -21,7 +21,7 @@ namespace Pole_Dance_projekt
             using (SqlConnection pripojeni = new SqlConnection(connectionString))
             {
                 pripojeni.Open();
-                string query = "SELECT Nazev FROM Prvky WHERE Obtiznost = @obtiznost AND ((Inverted = 0 AND @includeInverted = 0) OR (Inverted = 1 AND @includeInverted = 1))";
+                string query = "SELECT Nazev FROM Prvky WHERE Obtiznost = @obtiznost AND (Inverted = 0 OR (Inverted = 1 AND @includeInverted = 1))";
                 SqlCommand prikaz = new SqlCommand(query, pripojeni);
                 prikaz.Parameters.AddWithValue("@obtiznost", obtiznost);
                 prikaz.Parameters.AddWithValue("@includeInverted", includeInverted ? 1 : 0);
