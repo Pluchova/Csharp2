@@ -1,64 +1,82 @@
-using System.Data.SqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Pole_Dance_projekt
 {
     public partial class Form1 : Form
     {
+        private IDataService dataService;
         private static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PoleDanceDB;Integrated Security=True;Connect Timeout=30;Encrypt=False";
 
         public Form1()
         {
             InitializeComponent();
-            LoadPrvky();
+            dataService = new SqlService(connectionString);
+            LoadObtiznosti();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+        }
+
+        private void LoadObtiznosti()
+        {
+            cbPrvky.Items.Clear();
+
+            try
+            {
+                var obtiznosti = dataService.GetObtiznosti();
+                foreach (var obtiznost in obtiznosti)
+                {
+                    cbPrvky.Items.Add(obtiznost);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Chyba pøi naèítání obtížností: " + ex.Message);
+            }
+        }
+
+        private void cbInverted_CheckedChanged(object sender, EventArgs e)
+        {
 
         }
 
-        private void LoadPrvky()
+        private void btnPotvrdit_Click(object sender, EventArgs e)
         {
-            cbPrvky.Items.Clear(); // Vyèistíme existující položky v ComboBoxu
             try
             {
-                using (SqlConnection pripojeni = new SqlConnection(connectionString))
-                {
-                    pripojeni.Open();
-                    SqlCommand prikaz = new SqlCommand();
-                    prikaz.Connection = pripojeni;
-                    prikaz.CommandText = @"
-                        SELECT Obtiznost
-                        FROM (
-                            SELECT DISTINCT Obtiznost
-                            FROM Prvky
-                        ) AS DistinctObtiznost
-                        ORDER BY CASE 
-                            WHEN Obtiznost = 'Beginner' THEN 1 
-                            WHEN Obtiznost = 'Intermediate' THEN 2 
-                            WHEN Obtiznost = 'Advanced' THEN 3 
-                            ELSE 4 
-                        END";
+                string obtiznost = cbPrvky.SelectedItem?.ToString() ?? ""; // Získání vybrané obtížnosti z comboboxu
+                bool includeInverted = cbInverted.Checked;
+                int pocetPrvku = (int)NumericUpDown.Value;
 
-                    using (SqlDataReader reader = prikaz.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string obtiznost = reader["Obtiznost"].ToString();
-                            cbPrvky.Items.Add(obtiznost); // Pøidání jedineèných obtížností do ComboBoxu
-                        }
-                    }
+                // Zde voláme metodu s obìma parametry
+                var prvky = dataService.GetPrvky(obtiznost, includeInverted).ToList();
+                var randomPrvky = GetRandomPrvky(prvky, pocetPrvku);
+
+                lbNahodnePrvky.Items.Clear();
+                foreach (var prvek in randomPrvky)
+                {
+                    lbNahodnePrvky.Items.Add(prvek);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Chyba pøi naèítání prvkù: " + ex.Message);
             }
+        }
+
+        private List<string> GetRandomPrvky(List<string> prvky, int count)
+        {
+            Random rnd = new Random();
+            return prvky.OrderBy(x => rnd.Next()).Take(count).ToList();
         }
     }
 }
