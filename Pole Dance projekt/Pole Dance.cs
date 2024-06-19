@@ -56,7 +56,7 @@ namespace Pole_Dance_projekt
                 var selectedItem = cbPrvky.SelectedItem;
                 if (selectedItem == null)
                 {
-                    MessageBox.Show("Nevybral jsi obtížnost");
+                    MessageBox.Show("Nevybral jsi obtížnost.");
                     return;
                 }
                 string obtiznostString = null;
@@ -69,13 +69,13 @@ namespace Pole_Dance_projekt
 
                 if (pocetPrvku <= 0)
                 {
-                    MessageBox.Show("Nevybral jsi poèet prvkù");
+                    MessageBox.Show("Nevybral jsi poèet prvkù.");
                     return;
                 }
                 var prvky = dataService.GetPrvky(obtiznost, includeInverted).ToList();
                 if (prvky.Count < pocetPrvku)
                 {
-                    MessageBox.Show("Databáze neobsahuje tolik prvkù. Zobrazí se maximální možný poèet");
+                    MessageBox.Show("Databáze neobsahuje tolik prvkù. Zobrazí se maximální možný poèet prvkù.");
 
                 }
                 var randomPrvky = GetRandomPrvky(prvky, pocetPrvku);
