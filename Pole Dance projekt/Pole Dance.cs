@@ -8,7 +8,7 @@ namespace Pole_Dance_projekt
     public partial class Form1 : Form
     {
         private IDataService dataService;
-        private static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PoleDanceDB;Integrated Security=True;Connect Timeout=30;Encrypt=False";
+        private static string connectionString = @"Data Source=db\PoleDanceDB.sqlite;";
 
         public Form1()
         {
@@ -54,22 +54,30 @@ namespace Pole_Dance_projekt
             try
             {
                 var selectedItem = cbPrvky.SelectedItem;
+                if (selectedItem == null)
+                {
+                    MessageBox.Show("Nevybral jsi obtížnost");
+                    return;
+                }
                 string obtiznostString = null;
 
-                if (selectedItem != null)
-                {
-                    obtiznostString = selectedItem.ToString();
-                }
-                if (obtiznostString == null)
-                {
-                    obtiznostString = "";
-                }
+                obtiznostString = selectedItem.ToString();
+
                 string obtiznost = obtiznostString;
                 bool includeInverted = cbInverted.Checked;
                 int pocetPrvku = (int)NumericUpDown.Value;
 
-                // Zde voláme metodu s obìma parametry
+                if (pocetPrvku <= 0)
+                {
+                    MessageBox.Show("Nevybral jsi poèet prvkù");
+                    return;
+                }
                 var prvky = dataService.GetPrvky(obtiznost, includeInverted).ToList();
+                if (prvky.Count < pocetPrvku)
+                {
+                    MessageBox.Show("Databáze neobsahuje tolik prvkù. Zobrazí se maximální možný poèet");
+
+                }
                 var randomPrvky = GetRandomPrvky(prvky, pocetPrvku);
 
                 lbNahodnePrvky.Items.Clear();
