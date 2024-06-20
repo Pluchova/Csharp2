@@ -10,6 +10,10 @@ namespace Pole_Dance_projekt
     {
         IEnumerable<string> GetPrvky(string obtiznost, bool includeInverted);
         IEnumerable<string> GetObtiznosti();
-    }
-}
 
+        void AddPrvek(string nazev, string obtiznost, bool inverted);
+        bool ExistsPrvek(string nazev, StringComparison comparisonType);
+        void RemovePrvek(string nazev);
+    }
+
+}

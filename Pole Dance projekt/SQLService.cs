@@ -9,6 +9,37 @@ namespace Pole_Dance_projekt
         {
             this.connectionString = connectionString;
         }
+        public void AddPrvek(string nazev, string obtiznost, bool inverted)
+        {
+            using (var pripojeni = new SQLiteConnection(connectionString))
+            {
+                pripojeni.Open();
+                string query = "INSERT INTO Prvky (Nazev, Obtiznost, Inverted) VALUES (@nazev, @obtiznost, @inverted)";
+                var prikaz = pripojeni.CreateCommand();
+                prikaz.CommandText = query;
+                prikaz.Parameters.AddWithValue("@nazev", nazev);
+                prikaz.Parameters.AddWithValue("@obtiznost", obtiznost);
+                prikaz.Parameters.AddWithValue("@inverted", inverted ? 1 : 0);
+                prikaz.ExecuteNonQuery();
+            }
+        }
+
+        public void RemovePrvek(string nazev)
+        {
+            using (var pripojeni = new SQLiteConnection(connectionString))
+            {
+                pripojeni.Open();
+                if (!ExistsPrvek(nazev, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new Exception("Prvek neexistuje.");
+                }
+                string query = "DELETE FROM Prvky WHERE Nazev = @nazev";
+                var prikaz = pripojeni.CreateCommand();
+                prikaz.CommandText = query;
+                prikaz.Parameters.AddWithValue("@nazev", nazev);
+                prikaz.ExecuteNonQuery();
+            }
+        }
         public IEnumerable<string> GetPrvky(string obtiznost, bool includeInverted)
         {
             List<string> prvky = new List<string>();
@@ -55,6 +86,23 @@ namespace Pole_Dance_projekt
                 }
             }
             return obtiznosti;
+
+        }
+        public bool ExistsPrvek(string nazev, StringComparison comparisonType)
+        {
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT COUNT(*) FROM Prvky WHERE UPPER(Nazev) = UPPER(@Nazev)";
+                using (var command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Nazev", nazev);
+
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    return count > 0;
+                }
+            }
         }
     }
 }

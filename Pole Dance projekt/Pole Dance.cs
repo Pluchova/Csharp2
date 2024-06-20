@@ -15,7 +15,6 @@ namespace Pole_Dance_projekt
             InitializeComponent();
             dataService = new SqlService(connectionString);
             LoadObtiznosti();
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -46,7 +45,6 @@ namespace Pole_Dance_projekt
 
         private void cbInverted_CheckedChanged(object sender, EventArgs e)
         {
-
         }
 
         private void btnPotvrdit_Click(object sender, EventArgs e)
@@ -59,11 +57,8 @@ namespace Pole_Dance_projekt
                     MessageBox.Show("Nevybral jsi obtížnost.");
                     return;
                 }
-                string obtiznostString = null;
 
-                obtiznostString = selectedItem.ToString();
-
-                string obtiznost = obtiznostString;
+                string obtiznostString = selectedItem.ToString();
                 bool includeInverted = cbInverted.Checked;
                 int pocetPrvku = (int)NumericUpDown.Value;
 
@@ -72,14 +67,14 @@ namespace Pole_Dance_projekt
                     MessageBox.Show("Nevybral jsi poèet prvkù.");
                     return;
                 }
-                var prvky = dataService.GetPrvky(obtiznost, includeInverted).ToList();
+
+                var prvky = dataService.GetPrvky(obtiznostString, includeInverted).ToList();
                 if (prvky.Count < pocetPrvku)
                 {
                     MessageBox.Show("Databáze neobsahuje tolik prvkù. Zobrazí se maximální možný poèet prvkù.");
-
                 }
-                var randomPrvky = GetRandomPrvky(prvky, pocetPrvku);
 
+                var randomPrvky = GetRandomPrvky(prvky, pocetPrvku);
                 lbNahodnePrvky.Items.Clear();
                 foreach (var prvek in randomPrvky)
                 {
@@ -96,9 +91,28 @@ namespace Pole_Dance_projekt
         {
             Random rnd = new Random();
             var randomOrder = prvky.OrderBy(x => rnd.Next());
-            var selectedPrvky = randomOrder.Take(count);
-            var resultList = selectedPrvky.ToList();
-            return resultList;
+            return randomOrder.Take(count).ToList();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+
+            var pridatPrvekForm = new PridatPrvekForm(dataService);
+            pridatPrvekForm.ShowDialog();
+
+
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            var odstranPrvekForm = new OdstranPrvky(dataService);
+            odstranPrvekForm.ShowDialog();
+
+
         }
     }
 }
