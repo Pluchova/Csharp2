@@ -8,7 +8,7 @@ namespace Pole_Dance_projekt
     public partial class Form1 : Form
     {
         private IDataService dataService;
-        private static string connectionString = @"Data Source=db\PoleDanceDB.sqlite;";
+        private static string connectionString = @"Data Source=C:\Users\Nikèa\Documents\GitHub\Csharp2\Pole Dance projekt\db\PoleDanceDB.sqlite";
 
         public Form1()
         {
